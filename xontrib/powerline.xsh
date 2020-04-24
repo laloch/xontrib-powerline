@@ -2,7 +2,6 @@ import os
 from os import path
 from collections import namedtuple
 from time import strftime
-from xonsh.platform import ptk_shell_type
 
 
 __all__ = ()
@@ -14,8 +13,7 @@ $PL_DEFAULT_PROMPT = 'short_cwd>rtns'
 $PL_DEFAULT_RPROMPT = 'history>time'
 $PL_DEFAULT_TOOLBAR = 'who>cwd>branch>virtualenv>full_proc'
 
-if ptk_shell_type() == 'prompt_toolkit2':
-    $PTK_STYLE_OVERRIDES['bottom-toolbar'] = 'noreverse'
+$PTK_STYLE_OVERRIDES['bottom-toolbar'] = 'noreverse'
 
 modes = {
     'powerline': '\ue0b0\ue0b1\ue0b2\ue0b3',
@@ -44,7 +42,7 @@ def register_sec(f):
 
 @register_sec
 def history():
-    return Section(' %d ' % len(__xonsh__.history), 'WHITE', '#333')
+    return Section(' %d ' % len(__xonsh__.history), 'WHITE', '#444') 
 
 
 @register_sec
@@ -54,7 +52,7 @@ def time():
 
 @register_sec
 def short_cwd():
-    return Section(' {short_cwd} ', 'WHITE', '#333')
+    return Section(' {short_cwd} ', 'WHITE', '#444')
 
 
 def compress_home(path):
@@ -78,7 +76,7 @@ def cwd():
                     break
                 ni -= 1
         if ni != 0:  # if ni ==0 subdirectory matching failed
-            ps[ni] = '{BLUE}%s{WHITE}' % ps[ni]
+            ps[ni] = '{INTENSE_GREEN}%s{WHITE}' % ps[ni]
 
     if len(ps) > $PL_PARTS:
         new_ps = [ps[0]]
@@ -87,13 +85,13 @@ def cwd():
         ps = new_ps
 
     ps_join = (' %s ' % $PL_SEP_THIN).join(ps)
-    return Section(' %s ' % ps_join, 'WHITE', '#333')
+    return Section(' %s ' % ps_join, 'WHITE', '#444')
 
 
 @register_sec
 def branch():
     if $PROMPT_FIELDS['curr_branch']():
-        return Section('  {curr_branch} ', '#333', $PROMPT_FIELDS['branch_bg_color']()[1+len('background_'):-1])
+        return Section('  {curr_branch} ', '#444', $PROMPT_FIELDS['branch_bg_color']()[1+len('background_'):-1])
 
 
 @register_sec
@@ -115,7 +113,7 @@ def full_rtns():
         if rtn != 0:
             color = 'RED'
         else:
-            color = '#444'
+            color = '#555'
 
         return Section(' ' + str(rtn) + ' ', 'WHITE', color)
 
@@ -132,18 +130,18 @@ def timing():
 def full_proc():
     if __xonsh__.history.buffer:
         lst = __xonsh__.history.buffer[-1]
-        if lst['rtn'] != 0:
+        if lst['rtn'] and lst['rtn'] != 0:
             color = 'RED'
         else:
             color = '#444'
 
-        value = ' rtn: %d ts: %.2fs ' % (lst['rtn'], lst['ts'][1] - lst['ts'][0])
+        value = f" rtn: {lst['rtn'] if lst['rtn'] else 'None'} ts: {lst['ts'][1] - lst['ts'][0]:.2f}s "
         return Section(value, 'WHITE', color)
 
 
 @register_sec
 def who():
-    return Section(' {user}@{hostname} ', 'WHITE', '#555')
+    return Section(' {user}@{hostname} ', 'WHITE', '#666')
 
 
 def prompt_builder(var, right=False):
