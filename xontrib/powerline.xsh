@@ -141,7 +141,10 @@ def full_proc():
 
 @register_sec
 def who():
-    return Section(' {user}@{hostname} ', 'WHITE', '#666')
+    if "SSH_CLIENT" in __xonsh_env or "SSH_TTY" in __xonsh__.env:
+        return Section(' {user}@{hostname} ', 'BLACK', 'YELLOW')
+    else:
+        return Section(' {user}@{hostname} ', 'WHITE', '#666')
 
 
 def prompt_builder(var, right=False):
