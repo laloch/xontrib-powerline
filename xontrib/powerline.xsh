@@ -135,7 +135,7 @@ def full_proc():
         else:
             color = '#444'
 
-        value = f" rtn: {lst['rtn'] if lst['rtn'] else 'None'} ts: {lst['ts'][1] - lst['ts'][0]:.2f}s "
+        value = f" rtn: {lst['rtn']} ts: {lst['ts'][1] - lst['ts'][0]:.2f}s "
         return Section(value, 'WHITE', color)
 
 
